@@ -1,0 +1,1938 @@
+/* ==========================================================================
+   Dylan Invoice System - Modern Responsive Design System
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --primary: #15509c;
+  --primary-hover: #0f3d78;
+  --primary-light: #e8f0fe;
+  --primary-gradient: linear-gradient(135deg, #15509c 0%, #0d386c 100%);
+  --success: #2e7d32;
+  --success-light: #e8f5e9;
+  --success-glow: rgba(46, 125, 50, 0.18);
+
+  --bg-main: #f0f3f8;
+  --bg-card: #ffffff;
+  --bg-input: #f8fafc;
+  --bg-input-focus: #ffffff;
+
+  --gray-900: #0f172a;
+  --gray-800: #1e293b;
+  --gray-700: #334155;
+  --gray-600: #475569;
+  --gray-500: #64748b;
+  --gray-400: #94a3b8;
+  --gray-300: #cbd5e1;
+  --gray-200: #e2e8f0;
+  --gray-100: #f1f5f9;
+  --gray-50: #f8fafc;
+  --white: #ffffff;
+
+  /* Spreadsheet Specific Tokens */
+  --sheet-blue: #15509c;
+  --sheet-title: #1a3b70;
+  --sheet-yellow: #fff2cc;
+  --sheet-green: #2e7d32;
+  --sheet-grid-line: #e1e3e6;
+  --sheet-header-bg: #f8f9fa;
+  --sheet-header-text: #5f6368;
+  --sheet-selected-cell: #1a73e8;
+
+  /* Border Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Shadows */
+  --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 4px 14px rgba(21, 80, 156, 0.25);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Outfit', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* --------------------------------------------------------------------------
+   Reset & Base Styles
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-main);
+  color: var(--gray-900);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------------------------------------------------------------------------
+   Top App Header
+   -------------------------------------------------------------------------- */
+.app-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--gray-200);
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.header-container {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0.35rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  width: 36px;
+  height: 36px;
+  background: var(--primary-gradient);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  box-shadow: var(--shadow-glow);
+  transition: transform 0.2s ease;
+}
+
+.brand-logo:hover {
+  transform: rotate(-5deg) scale(1.04);
+}
+
+.brand-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.01em;
+}
+
+.version-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+
+.brand-subtitle {
+  font-size: 0.725rem;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+
+/* Mobile View Toggle Switcher */
+.view-toggle-bar {
+  display: none;
+  background: var(--gray-100);
+  padding: 0.2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-200);
+  gap: 0.2rem;
+}
+
+.toggle-btn {
+  padding: 0.35rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--gray-600);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+  background: var(--white);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.autosave-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: var(--success);
+  background: var(--success-light);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(46, 125, 50, 0.2);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.autosave-indicator.saving {
+  color: #d97706;
+  background: #fef3c7;
+  border-color: rgba(217, 119, 6, 0.2);
+}
+
+.autosave-indicator i {
+  font-size: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   Button Design System
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: var(--white);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #104180 0%, #082952 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(21, 80, 156, 0.35);
+}
+
+.btn-primary-soft {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: rgba(21, 80, 156, 0.15);
+}
+
+.btn-primary-soft:hover {
+  background: #dbe7fb;
+  color: var(--primary-hover);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--gray-700);
+  border-color: var(--gray-200);
+}
+
+.btn-ghost:hover {
+  background: var(--gray-100);
+  color: var(--gray-900);
+  border-color: var(--gray-300);
+}
+
+.btn-outline {
+  background: var(--white);
+  color: var(--gray-700);
+  border-color: var(--gray-300);
+  box-shadow: var(--shadow-subtle);
+}
+
+.btn-outline:hover {
+  background: var(--gray-50);
+  color: var(--gray-900);
+  border-color: var(--gray-400);
+}
+
+.btn-sm {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-icon-danger {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: #ef4444;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-icon-danger:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+/* --------------------------------------------------------------------------
+   Dual Workspace Layout
+   -------------------------------------------------------------------------- */
+.workspace-container {
+  flex: 1;
+  min-height: 0;
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0.45rem 1rem;
+  display: grid;
+  grid-template-columns: 410px 1fr;
+  gap: 0.85rem;
+  overflow: hidden;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+/* --------------------------------------------------------------------------
+   Left Section: Editor Panel (Sleek Internal Scroll, Zero Window Scroll)
+   -------------------------------------------------------------------------- */
+.editor-section {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.editor-inner {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+/* Slim Custom Scrollbar */
+.editor-inner::-webkit-scrollbar {
+  width: 5px;
+}
+
+.editor-inner::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.editor-inner::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.editor-inner::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Quick Stats Bar */
+.quick-stats-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 0.45rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  letter-spacing: 0.04em;
+}
+
+.stat-val {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.stat-val.total {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.stat-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--gray-200);
+}
+
+/* Cards */
+.editor-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.95rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.editor-card:hover {
+  border-color: var(--gray-300);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.icon-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.card-tag {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--gray-200);
+}
+
+/* Form Grids & Inputs */
+.form-grid {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.input-field label {
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cell-tag {
+  font-family: var(--font-mono);
+  font-size: 0.675rem;
+  font-weight: 600;
+  background: var(--gray-100);
+  color: var(--gray-500);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  border: 1px solid var(--gray-200);
+}
+
+.cell-tag.yellow {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--gray-400);
+  pointer-events: none;
+  transition: color 0.15s ease;
+}
+
+.input-wrap input {
+  width: 100%;
+  padding: 0.55rem 0.75rem 0.55rem 2.2rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--gray-900);
+  background: var(--bg-input);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.input-wrap input:hover {
+  border-color: var(--gray-400);
+}
+
+.input-wrap input:focus {
+  background: var(--bg-input-focus);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(21, 80, 156, 0.12);
+}
+
+.input-wrap input:focus+.input-icon,
+.input-wrap input:focus~.input-icon,
+.input-wrap:focus-within .input-icon {
+  color: var(--primary);
+}
+
+/* Date Range Fields */
+.date-range-container {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--gray-200);
+}
+
+.field-group-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gray-700);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sub-label {
+  font-size: 0.7rem !important;
+  color: var(--gray-500) !important;
+  font-weight: 500 !important;
+}
+
+.date-picker-input {
+  color-scheme: light;
+  cursor: pointer;
+}
+
+.date-picker-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.date-picker-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Tasks Table in Editor */
+.items-table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.1fr 34px;
+  gap: 0.5rem;
+  padding: 0 0.4rem 0.3rem 0.4rem;
+  font-size: 0.725rem;
+  font-weight: 700;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item-row {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.6rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.1fr 34px;
+  gap: 0.5rem;
+  align-items: center;
+  transition: all 0.15s ease;
+}
+
+.item-row:hover {
+  background: var(--white);
+  border-color: var(--gray-300);
+  box-shadow: var(--shadow-subtle);
+}
+
+.item-row input {
+  width: 100%;
+  padding: 0.4rem 0.55rem;
+  font-size: 0.825rem;
+  font-family: inherit;
+  border: 1px solid var(--gray-300);
+  border-radius: 4px;
+  background: var(--white);
+  outline: none;
+}
+
+.item-row input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(21, 80, 156, 0.1);
+}
+
+.item-row-total {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  text-align: right;
+  padding-right: 0.25rem;
+}
+
+.live-hours-hint {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 2px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid #86efac;
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+/* Calculation Summary */
+.calculation-summary {
+  margin-top: 0.5rem;
+  background: var(--gray-50);
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.825rem;
+  color: var(--gray-600);
+}
+
+.calc-val {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.grand-total-row {
+  border-top: 1px solid var(--gray-300);
+  padding-top: 0.6rem;
+  margin-top: 0.2rem;
+}
+
+.grand-total-row .calc-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.highlight-green {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: var(--success) !important;
+}
+
+.btn-icon-calc {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 0.8rem;
+}
+
+.btn-icon-calc:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+}
+
+/* --------------------------------------------------------------------------
+   Live Auto Time Calculation Breakdown Card
+   -------------------------------------------------------------------------- */
+.time-breakdown-card {
+  margin-top: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.time-breakdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tb-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gray-700);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tb-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #dcfce7;
+  color: #15803d;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #bbf7d0;
+}
+
+.time-math-block {
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  color: var(--gray-700);
+  background: var(--white);
+  border: 1px solid #e2e8f0;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-xs);
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.time-equiv-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+}
+
+.time-equiv-item {
+  background: var(--white);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-xs);
+  padding: 0.35rem 0.45rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.time-equiv-item.highlight {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.eq-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+}
+
+.eq-val {
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: var(--gray-800);
+}
+
+.time-equiv-item.highlight .eq-val {
+  color: #15803d;
+  font-weight: 800;
+}
+
+/* Modal Math Calculation Preview */
+.calc-math-preview {
+  background: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #1e293b;
+  box-shadow: var(--shadow-sm);
+}
+
+.math-line-row {
+  white-space: pre;
+}
+
+.math-line-divider {
+  border-bottom: 1.5px solid #0f172a;
+  margin: 0.35rem 0 0.45rem 0;
+  width: 100%;
+}
+
+.math-line-row.math-result {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.math-line-row.math-hours {
+  color: #15803d;
+  font-weight: 800;
+}
+
+/* --------------------------------------------------------------------------
+   Right Section: Live Excel / Google Sheets Canvas
+   -------------------------------------------------------------------------- */
+.preview-section {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.preview-card {
+  height: 100%;
+  min-height: 0;
+  background: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Clean Preview Toolbar */
+.preview-clean-toolbar {
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.45rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.preview-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.preview-icon {
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+
+.preview-card-title {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gray-800);
+}
+
+.sheet-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid #bae6fd;
+}
+
+/* Zoom Toolbar */
+.sheet-zoom-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.35rem;
+}
+
+.icon-tool {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--gray-600);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.725rem;
+  transition: all 0.15s ease;
+}
+
+.icon-tool:hover {
+  background: var(--gray-100);
+  color: var(--gray-900);
+}
+
+.zoom-text {
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  min-width: 38px;
+  text-align: center;
+}
+
+/* Canvas Scroll Area */
+.sheet-scroll-container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #eef2f6;
+  padding: 0.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.spreadsheet-canvas-wrapper {
+  background: var(--white);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid #d0d5dd;
+  border-radius: 4px;
+  transform-origin: center center;
+  transition: transform 0.15s ease;
+  width: 100%;
+  max-width: 840px;
+  box-sizing: border-box;
+}
+
+/* Excel Grid Table */
+.excel-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-family: Arial, var(--font-sans), sans-serif;
+  font-size: 9.5pt;
+  color: #000000;
+  box-sizing: border-box;
+}
+
+/* Column & Row Headers */
+.col-head,
+.row-head {
+  background: #f8f9fa;
+  color: #5f6368;
+  font-size: 8.5pt;
+  font-weight: 500;
+  text-align: center;
+  border: 1px solid #dadce0;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.col-head {
+  height: 22px;
+}
+
+.row-head {
+  width: 30px;
+  height: 22px;
+}
+
+.grid-corner-cell {
+  background: #f1f3f4;
+  border: 1px solid #dadce0;
+  width: 30px;
+  box-sizing: border-box;
+}
+
+/* Cell Content */
+.excel-grid-table td {
+  border: 1px solid var(--sheet-grid-line);
+  padding: 4px 6px;
+  vertical-align: middle;
+  line-height: 1.35;
+  height: 22px;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+/* Active Cell Outline */
+.excel-grid-table td.cell-active {
+  outline: 2px solid var(--sheet-selected-cell);
+  outline-offset: -1px;
+  background-color: rgba(26, 115, 232, 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   Accurate Reference Styles Matching Screenshot
+   -------------------------------------------------------------------------- */
+.sheet-accent-banner {
+  background-color: #15509c !important;
+  border: 1px solid #15509c !important;
+  padding: 0 !important;
+  height: 16px !important;
+  box-sizing: border-box !important;
+}
+
+.cell-invoice-title {
+  font-size: 22pt !important;
+  font-weight: 700 !important;
+  color: #1a3b70 !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+.cell-bold-label {
+  font-weight: 700 !important;
+  color: #000000 !important;
+}
+
+.cell-highlight-client {
+  background-color: #fff2cc !important;
+  font-weight: 400 !important;
+}
+
+.cell-header-desc {
+  font-weight: 700 !important;
+  color: #1a3b70 !important;
+}
+
+.cell-header-hours,
+.cell-header-rate,
+.cell-header-price {
+  font-weight: 700 !important;
+  color: #1a3b70 !important;
+  text-align: right !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.cell-subtotal-label {
+  text-align: right !important;
+  color: #000000 !important;
+}
+
+.cell-grand-total {
+  font-size: 20pt !important;
+  font-weight: 700 !important;
+  color: #2e7d32 !important;
+  text-align: right !important;
+  padding-right: 6px !important;
+  white-space: nowrap !important;
+}
+
+/* Bottom Sheet Tabs Bar */
+.sheets-bottom-bar {
+  background: #f8fafd;
+  border-top: 1px solid #e1e3e6;
+  padding: 0.35rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  overflow-x: auto;
+}
+
+.tab-scroll-nav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.sheet-nav-btn {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #dadce0;
+  background: var(--white);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-600);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.sheet-tabs-list {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sheet-tab-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--gray-700);
+  background: var(--gray-100);
+  border: 1px solid #dadce0;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.sheet-tab-item:hover {
+  background: #e8eaed;
+}
+
+.sheet-tab-item.active {
+  background: #3b82f6;
+  color: var(--white);
+  border-color: #2563eb;
+  font-weight: 600;
+}
+
+.tab-dropdown {
+  font-size: 0.65rem;
+}
+
+/* --------------------------------------------------------------------------
+   Export Preview Modal (Portrait & Landscape)
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.modal-dialog {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--gray-200);
+  width: 96vw;
+  max-width: 960px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.95) translateY(12px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.show .modal-dialog {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.modal-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: #fee2e2;
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.modal-icon-box.excel-mode {
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.modal-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.modal-subtitle {
+  font-size: 0.775rem;
+  color: var(--gray-500);
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--gray-400);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  background: var(--gray-100);
+  color: var(--gray-800);
+}
+
+/* Modal Toolbar */
+.modal-toolbar {
+  padding: 0.75rem 1.5rem;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.toolbar-label {
+  font-size: 0.775rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--gray-600);
+  letter-spacing: 0.03em;
+}
+
+.orientation-toggle {
+  display: flex;
+  background: var(--gray-100);
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+  gap: 0.25rem;
+}
+
+.orient-btn {
+  padding: 0.4rem 0.85rem;
+  border: none;
+  background: transparent;
+  color: var(--gray-700);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+}
+
+.orient-btn:hover {
+  color: var(--gray-900);
+}
+
+.orient-btn.active {
+  background: var(--white);
+  color: var(--primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.modal-filename-badge {
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  font-weight: 600;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+}
+
+/* Modal Body */
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: #e2e8f0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 440px;
+}
+
+.modal-paper-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-paper {
+  background: var(--white);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  padding: 1.5rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.modal-paper.portrait {
+  width: 100%;
+  max-width: 720px;
+  min-height: 600px;
+}
+
+.modal-paper.landscape {
+  width: 100%;
+  max-width: 920px;
+  min-height: 500px;
+}
+
+.modal-sheet-inner {
+  width: 100%;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   Pristine, High-Contrast Printable PDF & Vector Layout
+   -------------------------------------------------------------------------- */
+.pdf-invoice-root {
+  width: 100%;
+  margin: 0 auto;
+  background: #ffffff;
+  color: #000000;
+  font-family: Arial, var(--font-sans), sans-serif;
+  font-size: 10pt;
+  line-height: 1.35;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.pdf-invoice-root.landscape {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.pdf-table-grid {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-family: Arial, var(--font-sans), sans-serif;
+  font-size: 10pt;
+  color: #000000;
+}
+
+.pdf-cell-banner {
+  background-color: #15509c !important;
+  height: 14px;
+  padding: 0;
+  border-radius: 1px;
+}
+
+.pdf-cell-title {
+  font-size: 24pt;
+  font-weight: 700;
+  color: #1a3b70;
+  padding: 6px 0;
+  line-height: 1.2;
+}
+
+.pdf-cell-bold {
+  font-weight: 700;
+  color: #000000;
+  font-size: 10pt;
+  padding: 3px 0;
+}
+
+.pdf-cell-text {
+  font-size: 10pt;
+  color: #1e293b;
+  padding: 3px 0;
+}
+
+.pdf-cell-client {
+  background-color: #fff2cc !important;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.pdf-cell-phone {
+  text-align: right;
+  padding-right: 8px;
+  font-size: 9.5pt;
+  color: #334155;
+}
+
+.pdf-header-row td.pdf-col-header {
+  font-weight: 700;
+  color: #1a3b70;
+  font-size: 10pt;
+  padding: 6px 4px;
+  border-top: 1px solid #d0d5dd;
+  border-bottom: 1px solid #1a3b70;
+}
+
+.pdf-cell-role {
+  font-weight: 700;
+  color: #000000;
+  font-size: 10pt;
+  padding: 4px 0;
+}
+
+.pdf-item-row td {
+  padding: 4px 4px;
+  font-size: 10pt;
+}
+
+.pdf-cell-task {
+  color: #1e293b;
+  text-align: left;
+}
+
+.pdf-cell-num {
+  text-align: right;
+  color: #1e293b;
+}
+
+.pdf-summary-row td.pdf-cell-sum {
+  font-weight: 700;
+  color: #000000;
+  text-align: right;
+  padding: 6px 4px;
+  border-top: 1px solid #d0d5dd;
+  border-bottom: 1px solid #d0d5dd;
+}
+
+.pdf-cell-subtotal-label {
+  text-align: right;
+  color: #000000;
+  font-size: 10pt;
+  padding: 4px 4px;
+}
+
+.pdf-cell-subtotal-val {
+  text-align: right;
+  font-weight: 700;
+  color: #000000;
+  font-size: 10pt;
+  padding: 4px 4px;
+}
+
+.pdf-cell-grand-total {
+  font-size: 22pt;
+  font-weight: 700;
+  color: #2e7d32;
+  text-align: right;
+  padding: 10px 4px;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Time & Duration Calculator Modal
+   -------------------------------------------------------------------------- */
+.time-calc-dialog {
+  max-width: 580px;
+  width: 94vw;
+}
+
+.modal-body-calc {
+  padding: 1.25rem 1.5rem;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  overflow-y: auto;
+}
+
+.calc-panel {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.calc-grid-header {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.825rem;
+  color: var(--gray-700);
+  margin-bottom: 0.45rem;
+}
+
+.calc-grid-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+}
+
+.calc-num-input {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.55rem 0.4rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  outline: none;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.calc-num-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(21, 80, 156, 0.12);
+  background: var(--white);
+}
+
+.calc-num-input.readonly {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.calc-operator-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.75rem;
+  margin: 0.75rem 0;
+}
+
+.calc-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  cursor: pointer;
+  user-select: none;
+}
+
+.calc-radio-label input[type="radio"] {
+  cursor: pointer;
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+}
+
+.calc-equals-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--gray-400);
+  margin: 0.4rem 0;
+}
+
+.calc-conversions-box {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.conv-line.main-dhms {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--gray-900);
+}
+
+.conv-divider {
+  height: 1px;
+  background: var(--gray-200);
+  margin: 0.3rem 0;
+}
+
+.conv-line {
+  color: var(--gray-700);
+}
+
+.conv-line.highlight-hours {
+  color: #15803d;
+  font-weight: 800;
+  font-size: 1rem;
+  background: #dcfce7;
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-xs);
+  border-left: 4px solid #16a34a;
+  margin: 0.25rem 0;
+}
+
+/* Modal Footer */
+.modal-footer {
+  padding: 0.85rem 1.5rem;
+  background: #f8fafc;
+  border-top: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   Notification Toast Modal
+   -------------------------------------------------------------------------- */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--gray-900);
+  color: var(--white);
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  transform: translateY(100px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.toast-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(74, 222, 128, 0.2);
+  color: #4ade80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.toast-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.toast-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.toast-message {
+  font-size: 0.775rem;
+  color: var(--gray-300);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+
+/* Large screens (> 1400px) */
+@media (min-width: 1400px) {
+  .workspace-container {
+    grid-template-columns: 480px 1fr;
+  }
+}
+
+/* Tablets and medium laptops (<= 1100px) */
+@media (max-width: 1100px) {
+  .workspace-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .view-toggle-bar {
+    display: flex;
+  }
+
+  .editor-section,
+  .preview-section {
+    display: none;
+  }
+
+  .editor-section.active,
+  .preview-section.active {
+    display: flex;
+  }
+
+  .preview-card {
+    position: static;
+  }
+}
+
+/* Mobile Devices (<= 640px) */
+@media (max-width: 640px) {
+  .header-container {
+    padding: 0.65rem 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .brand-title {
+    font-size: 1.1rem;
+  }
+
+  .btn-text {
+    display: none;
+  }
+
+  .btn {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .btn-primary {
+    padding: 0.5rem 0.9rem;
+  }
+
+  .workspace-container {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .items-table-header {
+    display: none;
+  }
+
+  .item-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .item-row .form-group:first-child {
+    grid-column: span 2;
+  }
+
+  .item-row-total {
+    text-align: left;
+    padding-left: 0.25rem;
+  }
+
+  .sheet-scroll-container {
+    padding: 0.5rem;
+    justify-content: flex-start;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Print & PDF Optimization
+   -------------------------------------------------------------------------- */
+@media print {
+  body {
+    background: white;
+  }
+
+  .app-header,
+  .editor-section,
+  .sheets-app-header,
+  .formula-bar,
+  .sheets-bottom-bar,
+  .col-head,
+  .row-head,
+  .grid-corner-cell,
+  .toast {
+    display: none !important;
+  }
+
+  .workspace-container {
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+
+  .preview-section {
+    display: block !important;
+  }
+
+  .preview-card {
+    border: none;
+    box-shadow: none;
+    position: static;
+  }
+
+  .sheet-scroll-container {
+    background: transparent;
+    padding: 0;
+    max-height: none;
+  }
+
+  .spreadsheet-canvas-wrapper {
+    box-shadow: none;
+    border: none;
+    max-width: none;
+    width: 100%;
+  }
+
+  .sheet-accent-banner {
+    background-color: #15509c !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .cell-highlight-client {
+    background-color: #fff2cc !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
