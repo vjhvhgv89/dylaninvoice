@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dylan Invoice System - Excel & Web Invoice Generator</title>
+  <meta name="description"
+    content="Generate and download customized, styled Excel invoices with automated calculations and live spreadsheet preview.">
+
+  <!-- Google Fonts: Inter, Outfit, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome 6 Pro-style Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- ExcelJS and FileSaver for styled Excel (.xlsx) export -->
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <!-- html2pdf for direct PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Top App Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="header-brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-file-invoice-dollar"></i>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title-wrap">
+            <h1 class="brand-title">Invoice Studio</h1>
+            <span class="version-badge">v2.0</span>
+          </div>
+          <p class="brand-subtitle">Excel-Formatted Invoice Builder</p>
+        </div>
+      </div>
+
+      <!-- Mobile View Switcher (Visible on tablets & phones) -->
+      <div class="view-toggle-bar" id="mobile-view-toggle">
+        <button class="toggle-btn active" data-view="editor">
+          <i class="fa-solid fa-pen-to-square"></i> <span>Editor</span>
+        </button>
+        <button class="toggle-btn" data-view="preview">
+          <i class="fa-solid fa-table-cells"></i> <span>Excel Sheet</span>
+        </button>
+      </div>
+
+      <!-- Auto-Save Status Indicator & Quick Action Buttons -->
+      <div class="header-actions">
+        <div id="autosave-status" class="autosave-indicator" title="All changes are automatically saved to your browser">
+          <i class="fa-solid fa-cloud-check"></i> <span id="autosave-text">Auto-saved</span>
+        </div>
+        <button id="btn-save-draft" class="btn btn-ghost" title="Save draft to browser storage">
+          <i class="fa-regular fa-floppy-disk"></i> <span class="btn-text">Save</span>
+        </button>
+        <button id="btn-reset" class="btn btn-ghost" title="Reset all fields to default">
+          <i class="fa-solid fa-rotate-left"></i> <span class="btn-text">Reset</span>
+        </button>
+        <button id="btn-export-pdf" class="btn btn-outline" title="Preview & Download PDF invoice">
+          <i class="fa-solid fa-file-pdf" style="color: #dc2626;"></i> <span class="btn-text">Download PDF</span>
+        </button>
+        <button id="btn-export-excel" class="btn btn-primary" title="Preview & Download Excel spreadsheet">
+          <i class="fa-solid fa-file-excel"></i> <span>Download Excel (.xlsx)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dual Workspace Container -->
+  <main class="workspace-container">
+
+    <!-- Left Panel: Responsive Form Editor -->
+    <section class="editor-section active" id="editor-section">
+      <div class="editor-inner">
+
+        <!-- Quick Summary Bar on Mobile / Top -->
+        <div class="quick-stats-card">
+          <div class="stat-item">
+            <span class="stat-label">Hours</span>
+            <span class="stat-val" id="stat-hours">28.43</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-label">Rate</span>
+            <span class="stat-val" id="stat-rate">$5.00</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item highlight">
+            <span class="stat-label">Total Amount</span>
+            <span class="stat-val total" id="stat-total">$142.15</span>
+          </div>
+        </div>
+
+        <!-- Section 1: Header Dates & Invoice Metadata -->
+        <div class="editor-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon-circle"><i class="fa-solid fa-calendar-check"></i></span>
+              <span>Invoice Information</span>
+            </div>
+            <span class="card-tag">Row 6 - 8</span>
+          </div>
+
+          <div class="form-grid grid-2">
+            <div class="input-field">
+              <label for="input-invoice-num">Invoice # <span class="cell-tag">F8</span></label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-hashtag input-icon"></i>
+                <input type="text" id="input-invoice-num" placeholder="e.g. 001">
+              </div>
+            </div>
+
+            <div class="input-field">
+              <label for="input-submitted-on-date">Submitted on <span class="cell-tag">C6</span></label>
+              <div class="input-wrap">
+                <i class="fa-regular fa-calendar-days input-icon"></i>
+                <input type="date" id="input-submitted-on-date" class="date-picker-input">
+              </div>
+            </div>
+          </div>
+
+          <div class="date-range-container">
+            <label class="field-group-label">
+              <span>Work Preformed (Period)</span>
+              <span class="cell-tag">C7</span>
+            </label>
+            <div class="form-grid grid-2">
+              <div class="input-field">
+                <label for="input-work-from" class="sub-label">From Date</label>
+                <div class="input-wrap">
+                  <i class="fa-regular fa-calendar input-icon"></i>
+                  <input type="date" id="input-work-from" class="date-picker-input">
+                </div>
+              </div>
+              <div class="input-field">
+                <label for="input-work-to" class="sub-label">Up to Date</label>
+                <div class="input-wrap">
+                  <i class="fa-regular fa-calendar-check input-icon"></i>
+                  <input type="date" id="input-work-to" class="date-picker-input">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Client & Payee (Rows 8, 9, 10) -->
+        <div class="editor-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon-circle"><i class="fa-solid fa-building-user"></i></span>
+              <span>Client & Payee Details</span>
+            </div>
+            <span class="card-tag">Row 8 - 10</span>
+          </div>
+
+          <div class="form-grid grid-2">
+            <div class="input-field highlight-field">
+              <label for="input-invoice-for">Invoice For (Client) <span class="cell-tag yellow">B9</span></label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-building input-icon"></i>
+                <input type="text" id="input-invoice-for" placeholder="DJSW Enterprises LLC">
+              </div>
+            </div>
+
+            <div class="input-field">
+              <label for="input-payable-to">Payable To (Name) <span class="cell-tag">C9</span></label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-user-check input-icon"></i>
+                <input type="text" id="input-payable-to" placeholder="Enter full name / payee">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid grid-2">
+            <div class="input-field">
+              <label for="input-phone-id">Phone / ID Number <span class="cell-tag">B10</span></label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-phone input-icon"></i>
+                <input type="text" id="input-phone-id" placeholder="5616089563">
+              </div>
+            </div>
+
+            <div class="input-field">
+              <label for="input-payment-method">Payment Method / Details <span class="cell-tag">C10</span></label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-money-bill-transfer input-icon"></i>
+                <input type="text" id="input-payment-method" placeholder="e.g. Bank Transfer, Remitly, PayPal">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Role Title -->
+        <div class="editor-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon-circle"><i class="fa-solid fa-briefcase"></i></span>
+              <span>Professional Role</span>
+            </div>
+            <span class="card-tag">Row 14</span>
+          </div>
+
+          <div class="input-field">
+            <label for="input-role">Role Title <span class="cell-tag">B14</span></label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-id-badge input-icon"></i>
+              <input type="text" id="input-role" placeholder="Enter your job title / role">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Tasks & Work Breakdown -->
+        <div class="editor-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon-circle"><i class="fa-solid fa-list-check"></i></span>
+              <span>Tasks & Hours Breakdown</span>
+            </div>
+            <div class="card-actions-group">
+              <button type="button" id="btn-add-item" class="btn btn-sm btn-primary-soft">
+                <i class="fa-solid fa-plus"></i> Add Task
+              </button>
+            </div>
+          </div>
+
+          <div class="items-table-header">
+            <span>Task / Area</span>
+            <span class="text-right">Hours</span>
+            <span class="text-right">Rate ($)</span>
+            <span class="text-right">Total</span>
+            <span></span>
+          </div>
+
+          <div id="items-container" class="items-list">
+            <!-- Dynamic task rows rendered here -->
+          </div>
+
+          <!-- Total Calculation Breakdown -->
+          <div class="calculation-summary">
+            <div class="calc-row">
+              <span class="calc-label">Total Hours:</span>
+              <span class="calc-val" id="summary-hours">0.00</span>
+            </div>
+            <div class="calc-row">
+              <span class="calc-label">Subtotal:</span>
+              <span class="calc-val" id="summary-subtotal">$0.00</span>
+            </div>
+            <div class="calc-row grand-total-row">
+              <span class="calc-label">Grand Total:</span>
+              <span class="calc-val highlight-green" id="summary-total">$0.00</span>
+            </div>
+          </div>
+
+          <!-- Live Auto Time Calculation Breakdown -->
+          <div class="time-breakdown-card" id="task-time-breakdown-box">
+            <div class="time-breakdown-header">
+              <div class="tb-title">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Auto Time Calculation</span>
+              </div>
+              <span class="tb-badge" id="tb-badge-hours">0.00 hrs</span>
+            </div>
+
+            <div class="time-math-block" id="task-time-math-text">
+              0 days 0 hours 0 minutes 0 seconds = 0.00 hours
+            </div>
+
+            <div class="time-equiv-grid">
+              <div class="time-equiv-item">
+                <span class="eq-label">Days</span>
+                <span class="eq-val" id="eq-days">0</span>
+              </div>
+              <div class="time-equiv-item highlight">
+                <span class="eq-label">Decimal Hours</span>
+                <span class="eq-val" id="eq-hours">0.00 hrs</span>
+              </div>
+              <div class="time-equiv-item">
+                <span class="eq-label">Minutes</span>
+                <span class="eq-val" id="eq-mins">0 min</span>
+              </div>
+              <div class="time-equiv-item">
+                <span class="eq-label">Seconds</span>
+                <span class="eq-val" id="eq-secs">0 s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Right Panel: Live Excel Spreadsheet View -->
+    <section class="preview-section" id="preview-section">
+      <div class="preview-card">
+
+        <!-- Clean Preview Toolbar -->
+        <div class="preview-clean-toolbar">
+          <div class="preview-title-group">
+            <i class="fa-solid fa-table-cells preview-icon"></i>
+            <span class="preview-card-title">Live Spreadsheet Preview</span>
+            <span class="sheet-badge">Excel .xlsx</span>
+          </div>
+
+          <div class="sheet-zoom-toolbar">
+            <button id="btn-zoom-out" class="icon-tool" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+            <span id="zoom-level" class="zoom-text">100%</span>
+            <button id="btn-zoom-in" class="icon-tool" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+            <button id="btn-zoom-fit" class="icon-tool" title="Fit to Screen"><i class="fa-solid fa-arrows-rotate"></i></button>
+          </div>
+        </div>
+
+        <!-- Interactive Spreadsheet Canvas Scroll Area -->
+        <div class="sheet-scroll-container" id="sheet-scroll-container">
+          <div class="spreadsheet-canvas-wrapper" id="spreadsheet-canvas-wrapper">
+
+            <table class="excel-grid-table">
+              <colgroup>
+                <col style="width: 30px;">
+                <col style="width: 20px;">
+                <col style="width: 27%;">
+                <col style="width: 23%;">
+                <col style="width: 14%;">
+                <col style="width: 11%;">
+                <col style="width: 12%;">
+                <col style="width: 13%;">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th class="grid-corner-cell"></th>
+                  <th class="col-head">A</th>
+                  <th class="col-head">B</th>
+                  <th class="col-head">C</th>
+                  <th class="col-head">D</th>
+                  <th class="col-head">E</th>
+                  <th class="col-head">F</th>
+                  <th class="col-head">G</th>
+                </tr>
+              </thead>
+              <tbody id="excel-grid-body">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Time & Duration Calculator Modal -->
+  <div id="time-calc-modal" class="modal-overlay">
+    <div class="modal-dialog time-calc-dialog">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon-box" style="background: #e0f2fe; color: #0284c7;">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <div>
+            <h3 class="modal-title">Time Calculator & Converter</h3>
+            <p class="modal-subtitle">Auto calculate days, hours, minutes, and seconds into decimal hours</p>
+          </div>
+        </div>
+        <button id="btn-time-calc-close" class="modal-close-btn" title="Close Calculator">&times;</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body-calc">
+
+        <!-- Target Task Selector (when multiple tasks exist) -->
+        <div class="calc-task-target-wrap" id="calc-task-target-wrap" style="display: flex; align-items: center; justify-content: space-between; background: var(--white); padding: 0.6rem 0.85rem; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 0.85rem; box-shadow: var(--shadow-sm);">
+          <span style="font-weight: 600; color: var(--gray-700); display: flex; align-items: center; gap: 0.4rem;">
+            <i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Apply calculation to:
+          </span>
+          <select id="tc-target-task-select" style="padding: 0.35rem 0.65rem; border: 1px solid var(--gray-300); border-radius: 4px; font-size: 0.825rem; font-family: inherit; font-weight: 600; color: var(--gray-800); max-width: 280px; background: #fff; outline: none; cursor: pointer;">
+            <!-- Options populated dynamically -->
+          </select>
+        </div>
+
+        <!-- Exact Mathematical Calculation Display matching screenshot -->
+        <div class="calc-math-preview" id="tc-math-preview">
+          <div class="math-line-row">&nbsp;&nbsp;<span id="tc-math-entry1">0 days 20 hours 0 minutes 0 seconds</span></div>
+          <div class="math-line-row"><span id="tc-math-sign">+</span> <span id="tc-math-entry2">0 days 0 hours 51 minutes 0 seconds</span></div>
+          <div class="math-line-divider"></div>
+          <div class="math-line-row math-result">= <span id="tc-math-entry-res">0 days 20 hours 51 minutes 0 seconds</span></div>
+          <div class="math-line-row">= <span id="tc-math-days">0.86875</span> days</div>
+          <div class="math-line-row math-hours">= <span id="tc-math-hours">20.85</span> hours</div>
+          <div class="math-line-row">= <span id="tc-math-mins">1,251</span> minutes</div>
+          <div class="math-line-row">= <span id="tc-math-secs">75,060</span> seconds</div>
+        </div>
+        
+        <!-- Calculation Input Grid -->
+        <div class="calc-panel">
+          <div class="calc-grid-header">
+            <span>Day</span>
+            <span>Hour</span>
+            <span>Minute</span>
+            <span>Second</span>
+          </div>
+
+          <!-- Time Entry 1 -->
+          <div class="calc-grid-row">
+            <input type="number" id="tc-d1" min="0" value="0" class="calc-num-input" placeholder="0">
+            <input type="number" id="tc-h1" min="0" value="20" class="calc-num-input" placeholder="0">
+            <input type="number" id="tc-m1" min="0" value="0" class="calc-num-input" placeholder="0">
+            <input type="number" id="tc-s1" min="0" value="0" class="calc-num-input" placeholder="0">
+          </div>
+
+          <!-- Operation Toggle -->
+          <div class="calc-operator-row">
+            <label class="calc-radio-label">
+              <input type="radio" name="tc-op" value="add" checked>
+              <span>Add (+)</span>
+            </label>
+            <label class="calc-radio-label">
+              <input type="radio" name="tc-op" value="sub">
+              <span>Subtract (&minus;)</span>
+            </label>
+          </div>
+
+          <!-- Time Entry 2 -->
+          <div class="calc-grid-row">
+            <input type="number" id="tc-d2" min="0" value="0" class="calc-num-input" placeholder="0">
+            <input type="number" id="tc-h2" min="0" value="0" class="calc-num-input" placeholder="0">
+            <input type="number" id="tc-m2" min="0" value="51" class="calc-num-input" placeholder="0">
+            <input type="number" id="tc-s2" min="0" value="0" class="calc-num-input" placeholder="0">
+          </div>
+
+          <!-- Equals Indicator -->
+          <div class="calc-equals-divider">
+            <span>=</span>
+          </div>
+
+          <!-- Result Row -->
+          <div class="calc-grid-row result-row">
+            <input type="text" id="tc-d-res" readonly class="calc-num-input readonly" value="0">
+            <input type="text" id="tc-h-res" readonly class="calc-num-input readonly" value="20">
+            <input type="text" id="tc-m-res" readonly class="calc-num-input readonly" value="51">
+            <input type="text" id="tc-s-res" readonly class="calc-num-input readonly" value="0">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" id="btn-tc-clear" class="btn btn-ghost">Clear</button>
+        <button type="button" id="btn-tc-apply" class="btn btn-primary">
+          <i class="fa-solid fa-check"></i> Apply <span id="btn-tc-apply-val">20.85</span> hrs to Task
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Export Preview Modal (Portrait / Landscape Switcher) -->
+  <div id="export-modal" class="modal-overlay">
+    <div class="modal-dialog">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon-box" id="modal-type-icon">
+            <i class="fa-solid fa-file-pdf"></i>
+          </div>
+          <div>
+            <h3 class="modal-title" id="modal-heading">Export Document Preview</h3>
+            <p class="modal-subtitle" id="modal-subheading">Choose orientation and confirm download</p>
+          </div>
+        </div>
+        <button id="btn-modal-close" class="modal-close-btn" title="Close Preview">&times;</button>
+      </div>
+
+      <!-- Modal Options Toolbar -->
+      <div class="modal-toolbar">
+        <div class="toolbar-group">
+          <span class="toolbar-label">Orientation:</span>
+          <div class="orientation-toggle">
+            <button type="button" class="orient-btn active" id="btn-orient-portrait" data-orient="portrait">
+              <i class="fa-solid fa-file"></i> <span>Portrait</span>
+            </button>
+            <button type="button" class="orient-btn" id="btn-orient-landscape" data-orient="landscape">
+              <i class="fa-solid fa-file-invoice" style="transform: rotate(90deg);"></i> <span>Landscape</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar-group">
+          <span class="toolbar-label">File:</span>
+          <span class="modal-filename-badge" id="modal-filename">Invoice_004.pdf</span>
+        </div>
+      </div>
+
+      <!-- Modal Body: Scaled Paper Preview -->
+      <div class="modal-body">
+        <div class="modal-paper-container">
+          <div class="modal-paper portrait" id="modal-paper">
+            <div id="modal-preview-sheet" class="modal-sheet-inner">
+              <!-- Cloned spreadsheet preview rendered here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" id="btn-modal-cancel" class="btn btn-ghost">Cancel</button>
+        <button type="button" id="btn-modal-confirm" class="btn btn-primary">
+          <i class="fa-solid fa-download"></i> <span id="modal-confirm-text">Download</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Notification Toast Modal -->
+  <div id="toast" class="toast">
+    <div class="toast-icon-box">
+      <i class="toast-icon fa-solid fa-check"></i>
+    </div>
+    <div class="toast-content">
+      <span class="toast-title">Notification</span>
+      <span class="toast-message">Invoice saved successfully!</span>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
+
+</html>
